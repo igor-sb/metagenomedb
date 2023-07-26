@@ -1,4 +1,4 @@
-"""Download genome assembly summaries from NCBI FTP."""
+"""Download genome assembly summaries from NCBI FTP server."""
 
 import logging
 import fire
