@@ -1,8 +1,7 @@
 """Download genome assembly summaries from NCBI FTP."""
 
 import logging
-
-import fire  # type: ignore
+import fire
 
 from src.genome_assemblies.download import download_assembly_summaries
 
