@@ -11,6 +11,7 @@ mypy = "^0.991"
 fire = "^0.5.0"
 pytest-mock = "^3.11.1"
 requests-mock = "^1.11.0"
+pandas = "^2.0.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
