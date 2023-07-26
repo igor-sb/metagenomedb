@@ -1,11 +1,12 @@
 """Download genome assembly summaries."""
 
-import os
-import fire
 import logging
+import os
+from datetime import datetime
 from email.message import Message
 from urllib.request import urlretrieve
-from datetime import datetime
+
+import fire  # type: ignore
 
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ LOG = logging.getLogger(__name__)
 
 def download_kingdom_assembly_summary(
     kingdom: str,
-    output_filename: str
+    output_filename: str,
 ) -> tuple[str, Message]:
     base_url = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/'
     full_url = f'{base_url}/{kingdom}/assembly_summary.txt'
@@ -27,19 +28,22 @@ def download_kingdom_assembly_summary(
 
 def download_assembly_summaries(
     output_path: str,
-    kingdoms: str='archaea,bacteria',
-    timestamp: bool=True,
+    kingdoms: str = 'archaea,bacteria',
+    timestamp: bool = True,
 ) -> list[str]:
     filenames = []
     suffix = '_' + datetime.now().strftime('%Y-%m-%d') if timestamp else ''
     for kingdom in kingdoms.split(','):
-        LOG.info(f' downloading genome assembly summary for kingdom: {kingdom}')
+        LOG.info(f' downloading assembly summary for kingdom: {kingdom}')
         output_filename = os.path.join(
             output_path,
             f'{kingdom}_assembly_summary{suffix}.txt',
         )
-        file, _ = download_kingdom_assembly_summary(kingdom, output_filename)
-        filenames.append(file)
+        out_file, _ = download_kingdom_assembly_summary(
+            kingdom,
+            output_filename,
+        )
+        filenames.append(out_file)
     return filenames
 
 
