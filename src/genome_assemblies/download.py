@@ -18,11 +18,6 @@ def download_kingdom_assembly_summary(
 ) -> tuple[str, Message]:
     base_url = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/'
     full_url = f'{base_url}/{kingdom}/assembly_summary.txt'
-
-    output_path = os.path.dirname(output_filename)
-    if not os.path.isdir(output_path):
-        os.makedirs(output_path)
-
     return urlretrieve(full_url, output_filename)  # noqa: S310
 
 
@@ -39,11 +34,8 @@ def download_assembly_summaries(
             output_path,
             f'{kingdom}_assembly_summary{suffix}.txt',
         )
-        out_file, _ = download_kingdom_assembly_summary(
-            kingdom,
-            output_filename,
-        )
-        filenames.append(out_file)
+        download_kingdom_assembly_summary(kingdom, output_filename)
+        filenames.append(output_filename)
     return filenames
 
 
