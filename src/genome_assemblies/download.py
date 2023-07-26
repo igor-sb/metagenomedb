@@ -1,15 +1,7 @@
-"""Download genome assembly summaries."""
-
-import logging
 import os
 from datetime import datetime
 from email.message import Message
 from urllib.request import urlretrieve
-
-import fire  # type: ignore
-
-logging.basicConfig(level=logging.INFO)
-LOG = logging.getLogger(__name__)
 
 
 def download_kingdom_assembly_summary(
@@ -29,7 +21,6 @@ def download_assembly_summaries(
     filenames = []
     suffix = '_' + datetime.now().strftime('%Y-%m-%d') if timestamp else ''
     for kingdom in kingdoms.split(','):
-        LOG.info(f' downloading assembly summary for kingdom: {kingdom}')
         output_filename = os.path.join(
             output_path,
             f'{kingdom}_assembly_summary{suffix}.txt',
@@ -37,7 +28,3 @@ def download_assembly_summaries(
         download_kingdom_assembly_summary(kingdom, output_filename)
         filenames.append(output_filename)
     return filenames
-
-
-if __name__ == '__main__':
-    fire.Fire(download_assembly_summaries)
