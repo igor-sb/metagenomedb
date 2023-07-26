@@ -1,4 +1,6 @@
 data/
+README_files/*
+*.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
