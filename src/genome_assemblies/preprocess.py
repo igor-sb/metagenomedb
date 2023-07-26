@@ -1,9 +1,21 @@
 import re
+import types
 
 import pandas as pd
 
+# See: https://tinyurl.com/DictConstant
 ASSEMBLY_LEVELS = ('Complete Genome', 'Chromosome', 'Scaffold', 'Contig')
 REFSEQ_LEVELS = ('reference genome', 'representative genome', 'na')
+RAW_ASSEMBLY_SUMMARY_COLUMNS = types.MappingProxyType({
+    '#assembly_accession': str,
+    'refseq_category': str,
+    'taxid': str,
+    'organism_name': str,
+    'infraspecific_name': str,
+    'assembly_level': str,
+    'seq_rel_date': str,
+    'ftp_path': str,
+})
 
 
 def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:
@@ -40,22 +52,12 @@ def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_raw_assembly_summary_table(filename: str) -> pd.DataFrame:
-    columns = {
-        '#assembly_accession': str,
-        'refseq_category': str,
-        'taxid': str,
-        'organism_name': str,
-        'infraspecific_name': str,
-        'assembly_level': str,
-        'seq_rel_date': str,
-        'ftp_path': str,
-    }
     return pd.read_csv(
         filename,
         delimiter='\t',
         skiprows=1,
-        usecols=list(columns.keys()),
-        dtype=columns,
+        usecols=list(RAW_ASSEMBLY_SUMMARY_COLUMNS.keys()),
+        dtype=RAW_ASSEMBLY_SUMMARY_COLUMNS,
     )
 
 

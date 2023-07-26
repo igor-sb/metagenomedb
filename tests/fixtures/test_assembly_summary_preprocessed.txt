@@ -1,0 +1,4 @@
+#assembly_accession	refseq_category	taxid	species_taxid	organism_name	infraspecific_name	assembly_level	seq_rel_date	ftp_path	strain_name
+GCF_002287175.1	representative genome	2161	2161	Test microbe1	strain=single_example	Contig	9/6/2017	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/287/175/GCF_002287175.1_ASM228717v1	Test microbe1 single_example
+GCF_001458655.1	representative genome	2162	2162	Test microbe2 subsp. rep_genome_example	na	Complete Genome	11/16/2015	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/458/655/GCF_001458655.1_Mb9	Test microbe2 rep_genome_example
+GCF_029601605.1	reference genome	2162	2162	Test microbe3	different_date_example	Complete Genome	4/5/2023	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/029/601/605/GCF_029601605.1_ASM2960160v1	Test microbe3 different_date_example
