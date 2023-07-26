@@ -1,6 +1,7 @@
 """Download genome assembly summaries from NCBI FTP server."""
 
 import logging
+
 import fire
 
 from src.genome_assemblies.download import download_assembly_summaries
