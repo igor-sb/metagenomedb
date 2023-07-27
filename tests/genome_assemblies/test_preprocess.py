@@ -2,7 +2,7 @@ import pytest
 import os
 import pandas as pd
 
-from src.genome_assemblies.preprocess import load_raw_assembly_summary_table
+from src.genome_assemblies.io import load_raw_assembly_summary_table
 
 fixture_path = '{base_path}/tests/fixtures'.format(
     base_path=os.path.abspath('.'),

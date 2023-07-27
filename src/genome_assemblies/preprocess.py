@@ -1,83 +1,78 @@
+import os
 import re
 
 import pandas as pd
-import yaml
 
-with open('config/genome_assembly.yaml') as genome_assembly_config:
-    ASSEMBLY_SUMMARY_CONFIG = yaml.safe_load(genome_assembly_config)
+from src.genome_assemblies.io import assembly_summary_config
 
 
 def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:
-    assemblies_df.infraspecific_name = assemblies_df.infraspecific_name.apply(
-        remove_infraspecific_name_metadata,
+    assemblies_df = (
+        assemblies_df
+        .pipe(remove_infraspecific_name_metadata)
+        .pipe(create_strain_names)
+        .pipe(construct_download_urls)
     )
-    assemblies_df.strain_name = assemblies_df.organism_name.apply(
-        make_strain_name_from_organism_name,
-    )
-    assemblies_df.assembly_level = pd.Categorical(
-        assemblies_df.assembly_level,
-        categories=ASSEMBLY_SUMMARY_CONFIG['assembly_levels'],
-        ordered=True,
-    )
-    assemblies_df.refseq_category = pd.Categorical(
-        assemblies_df.refseq_category,
-        categories=ASSEMBLY_SUMMARY_CONFIG['refseq_levels'],
-        ordered=True,
-    )
-    assemblies_df.strain_name = assemblies_df.apply(
-        add_detailed_strain_designation,
-        axis=1,
-    )
-    assemblies_df = assemblies_df.sort_values(
-        by=['assembly_level', 'refseq_category', 'seq_rel_date'],
-        ascending=[False, False, False],
-    )
+    for column in ('assembly_level', 'refseq_category'):
+        assemblies_df[column] = pd.Categorical(
+            assemblies_df[column],
+            categories=assembly_summary_config()[column],
+            ordered=True,
+        )
     return (
         assemblies_df
+        .sort_values(
+            by=['assembly_level', 'refseq_category', 'seq_rel_date'],
+            ascending=[False, False, False],
+        )
         .groupby('strain_name')
         .first()
         .reset_index(drop=True)
     )
 
 
-def load_raw_assembly_summary_table(filename: str) -> pd.DataFrame:
-    return pd.read_csv(
-        filename,
-        delimiter='\t',
-        skiprows=1,
-        usecols=list(ASSEMBLY_SUMMARY_CONFIG['columns'].keys()),
-        dtype=ASSEMBLY_SUMMARY_CONFIG['columns'],
+def remove_infraspecific_name_metadata(df: pd.DataFrame) -> pd.DataFrame:
+    df.infraspecific_name = df.infraspecific_name.apply(
+        lambda row: (
+            str(row.infraspecific_name)
+            .replace('strain=', '')
+            .replace('nan', '')
+            .replace('substr. ', '')
+        ),
     )
+    return df
 
 
-def write_filtered_assembly_summary_table(
-    df: pd.DataFrame,
-    filename: str,
-) -> None:
-    df.to_csv(filename, sep='\t', index=False)
-
-
-def remove_infraspecific_name_metadata(infraspecific_name: str) -> str:
-    return (
-        str(infraspecific_name)
-        .replace('strain=', '')
-        .replace('nan', '')
-        .replace('substr. ', '')
+def create_strain_names(df: pd.DataFrame) -> pd.DataFrame:
+    df.strain_name = df.organism_name.apply(
+        make_strain_name_from_organism_name,
     )
+    df.strain_name = df.apply(
+        add_detailed_strain_designation,
+        axis=1,
+    )
+    return df
+
+
+def construct_download_urls(df: pd.DataFrame) -> pd.DataFrame:
+    df.url_features = df.ftp_path.apply(
+        lambda path: os.path.join(
+            path,
+            os.path.basename(path) + '_feature_table.txt.gz',
+        ),
+    )
+    df.url_sequence = df.ftp_path.apply(
+        lambda path: os.path.join(
+            path,
+            os.path.basename(path) + '_genomic.fna.gz',
+        ),
+    )
+    return df
 
 
 def make_strain_name_from_organism_name(organism_name: str) -> str:
-    strain_name = (
-        str(organism_name)
-        .replace('substr. ', '')
-        .replace('str. ', '')
-        .replace('subsp. ', '')
-        .replace("'", '')
-    )
-    strain_name = (
-        re.sub(r'\b(\w+)( \1\b)+', r'\1', strain_name)
-        .replace('[', '')
-        .replace(']', '')
+    strain_name = re.sub(
+        r"substr\. |str\. |subsp\. |\'|\[|\]", '', str(organism_name),
     )
     return re.sub(r'\b(\w+)( \1\b)+', r'\1', strain_name)
 

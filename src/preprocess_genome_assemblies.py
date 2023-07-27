@@ -8,11 +8,11 @@ import logging
 
 import fire
 
-from src.genome_assemblies.preprocess import (
+from src.genome_assemblies.io import (
     load_raw_assembly_summary_table,
-    select_best_strain_assemblies,
     write_filtered_assembly_summary_table,
 )
+from src.genome_assemblies.preprocess import select_best_strain_assemblies
 
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)

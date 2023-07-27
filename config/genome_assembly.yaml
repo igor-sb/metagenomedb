@@ -8,13 +8,13 @@ columns:
   'seq_rel_date': str
   'ftp_path': str
 
-assembly_levels:
+assembly_level:
   - 'Complete Genome'
   - 'Chromosome'
   - 'Scaffold'
   - 'Contig'
 
-refseq_levels:
+refseq_category:
   - 'reference genome'
   - 'representative genome'
   - 'na'

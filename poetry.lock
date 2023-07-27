@@ -997,6 +997,17 @@ files = [
 ]
 
 [[package]]
+name = "pycurl"
+version = "7.45.2"
+description = "PycURL -- A Python Interface To The cURL library"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "pycurl-7.45.2.tar.gz", hash = "sha256:5730590be0271364a5bddd9e245c9cc0fb710c4cbacbdd95264a3122d23224ca"},
+]
+
+[[package]]
 name = "pydocstyle"
 version = "6.3.0"
 description = "Python docstring style checker"
@@ -1477,4 +1488,4 @@ typing_extensions = ">=3.6,<5.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "9e4c4aecc2d0045780373020c8b2aef71ab9261d852d93ad803d13a900748fcf"
+content-hash = "83f20ff8310f454f73547871d56c122ffcd97bff1b5aa62b5129f581e8a34337"
