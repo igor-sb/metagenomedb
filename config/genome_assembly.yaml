@@ -1,0 +1,20 @@
+columns:
+  '#assembly_accession': str
+  'refseq_category': str
+  'taxid': str
+  'organism_name': str
+  'infraspecific_name': str
+  'assembly_level': str
+  'seq_rel_date': str
+  'ftp_path': str
+
+assembly_levels:
+  - 'Complete Genome'
+  - 'Chromosome'
+  - 'Scaffold'
+  - 'Contig'
+
+refseq_levels:
+  - 'reference genome'
+  - 'representative genome'
+  - 'na'

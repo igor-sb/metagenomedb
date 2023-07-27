@@ -1,21 +1,10 @@
 import re
-import types
 
 import pandas as pd
+import yaml
 
-# See: https://tinyurl.com/DictConstant
-ASSEMBLY_LEVELS = ('Complete Genome', 'Chromosome', 'Scaffold', 'Contig')
-REFSEQ_LEVELS = ('reference genome', 'representative genome', 'na')
-RAW_ASSEMBLY_SUMMARY_COLUMNS = types.MappingProxyType({
-    '#assembly_accession': str,
-    'refseq_category': str,
-    'taxid': str,
-    'organism_name': str,
-    'infraspecific_name': str,
-    'assembly_level': str,
-    'seq_rel_date': str,
-    'ftp_path': str,
-})
+with open('config/genome_assembly.yaml') as genome_assembly_config:
+    ASSEMBLY_SUMMARY_CONFIG = yaml.safe_load(genome_assembly_config)
 
 
 def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:
@@ -27,12 +16,12 @@ def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:
     )
     assemblies_df.assembly_level = pd.Categorical(
         assemblies_df.assembly_level,
-        categories=ASSEMBLY_LEVELS,
+        categories=ASSEMBLY_SUMMARY_CONFIG['assembly_levels'],
         ordered=True,
     )
     assemblies_df.refseq_category = pd.Categorical(
         assemblies_df.refseq_category,
-        categories=REFSEQ_LEVELS,
+        categories=ASSEMBLY_SUMMARY_CONFIG['refseq_levels'],
         ordered=True,
     )
     assemblies_df.strain_name = assemblies_df.apply(
@@ -56,8 +45,8 @@ def load_raw_assembly_summary_table(filename: str) -> pd.DataFrame:
         filename,
         delimiter='\t',
         skiprows=1,
-        usecols=list(RAW_ASSEMBLY_SUMMARY_COLUMNS.keys()),
-        dtype=RAW_ASSEMBLY_SUMMARY_COLUMNS,
+        usecols=list(ASSEMBLY_SUMMARY_CONFIG['columns'].keys()),
+        dtype=ASSEMBLY_SUMMARY_CONFIG['columns'],
     )
 
 
