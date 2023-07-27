@@ -23,6 +23,7 @@ isort = "^5.10.1"
 flake8 = "4.0.1"
 pre-commit = "^2.20.0"
 coverage = "^6.5.0"
+ipykernel = "^6.25.0"
 
 [build-system]
 requires = ["poetry-core"]

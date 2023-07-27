@@ -1,21 +1,25 @@
-import pytest
-import os
 import pandas as pd
-
-from src.genome_assemblies.io import load_raw_assembly_summary_table
-
-fixture_path = '{base_path}/tests/fixtures'.format(
-    base_path=os.path.abspath('.'),
+from pandas.testing import assert_frame_equal
+from src.genome_assemblies.io import (
+    load_raw_assembly_summary_table,
+    preprocessed_assembly_summary_columns,
 )
+from src.genome_assemblies.preprocess import select_best_strain_assemblies
 
 
-@pytest.fixture(name='mock_assembly_summary_file')
-def fixture_mock_assembly_summary_file():
-    return '{fixture_path}/test_assembly_summary.txt'.format(
-        fixture_path=fixture_path,
-    )
-
-
-def test_load_raw_assembly_summary_table(mock_assembly_summary_file):
+def test_select_best_strain_assemblies(
+    mock_assembly_summary_file,
+    mock_preprocessed_assembly_summary_file,
+):
     df = load_raw_assembly_summary_table(mock_assembly_summary_file)
-    assert isinstance(df, pd.DataFrame)
+    preprocessed_cols = preprocessed_assembly_summary_columns()
+    expected_df = pd.read_csv(
+        mock_preprocessed_assembly_summary_file,
+        delimiter='\t',
+        usecols=list(preprocessed_cols.keys()),
+        dtype=preprocessed_cols,
+    )
+    actual_df = select_best_strain_assemblies(df)
+    for column in ('assembly_level', 'refseq_category'):
+        actual_df[column] = actual_df[column].astype(str)
+    assert_frame_equal(left=actual_df, right=expected_df)

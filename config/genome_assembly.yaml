@@ -8,6 +8,11 @@ columns:
   'seq_rel_date': str
   'ftp_path': str
 
+preprocessed_columns:
+  'strain_name': str
+  'url_features': str
+  'url_sequence': str
+
 assembly_level:
   - 'Complete Genome'
   - 'Chromosome'

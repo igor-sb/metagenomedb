@@ -12,6 +12,13 @@ def assembly_summary_config(
     return config
 
 
+def preprocessed_assembly_summary_columns(
+    filename: str = 'config/genome_assembly.yaml',
+) -> dict[str, Any]:
+    config = assembly_summary_config(filename)
+    return dict(config['columns'], **config['preprocessed_columns'])
+
+
 def load_raw_assembly_summary_table(filename: str) -> pd.DataFrame:
     config = assembly_summary_config()
     return pd.read_csv(
