@@ -10,7 +10,7 @@ import fire
 
 from src.genome_assemblies.io import (
     load_raw_assembly_summary_table,
-    write_filtered_assembly_summary_table,
+    save_preprocessed_assembly_summary_table,
 )
 from src.genome_assemblies.preprocess import select_best_strain_assemblies
 
@@ -24,7 +24,10 @@ def main(input_assembly_summary: str, output_assembly_summary) -> None:
     LOG.info('preprocessing and selecting best assemblies')
     filtered_df = select_best_strain_assemblies(df)
     LOG.info('writing preprocessed assembly summary table')
-    write_filtered_assembly_summary_table(filtered_df, output_assembly_summary)
+    save_preprocessed_assembly_summary_table(
+        filtered_df,
+        output_assembly_summary,
+    )
 
 
 if __name__ == '__main__':

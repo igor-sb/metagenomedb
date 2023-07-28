@@ -5,6 +5,8 @@ from datetime import datetime
 from email.message import Message
 from urllib.request import urlretrieve
 
+from src.genome_assemblies.io import load_preprocessed_assembly_summary_table
+
 
 def download_kingdom_assembly_summary(
     kingdom: str,
@@ -38,3 +40,24 @@ def download_assembly_summaries(
         download_kingdom_assembly_summary(kingdom, output_filename_with_path)
         filenames.append(output_filename_with_path)
     return filenames
+
+
+def construct_download_path_from_url(url: str, out_path: str) -> str:
+    return os.path.join(out_path, os.path.basename(url))
+
+
+def create_download_queues(
+    assembly_summary_filename: str,
+    features_path: str = 'data/features/',
+    sequence_path: str = 'data/sequence/',
+) -> dict[str, list]:
+    df = load_preprocessed_assembly_summary_table(assembly_summary_filename)
+    features_queue = [
+        (url, construct_download_path_from_url(url, features_path))
+        for url in df.url_features
+    ]
+    sequence_queue = [
+        (url, construct_download_path_from_url(url, sequence_path))
+        for url in df.url_sequence
+    ]
+    return {'features': features_queue, 'sequence': sequence_queue}

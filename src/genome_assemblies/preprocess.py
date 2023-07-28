@@ -24,7 +24,7 @@ def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:
         assemblies_df
         .sort_values(
             by=['assembly_level', 'refseq_category', 'seq_rel_date'],
-            ascending=[True, True, False],            
+            ascending=[True, True, False],
         )
         .groupby('strain_name')
         .first()
@@ -93,8 +93,8 @@ def add_strain_name_column(df: pd.DataFrame) -> pd.DataFrame:
         axis=1,
     )
     df.loc[~rows_with_detailed_labels, 'strain_name'] = (
-        df[~rows_with_detailed_labels]['strain_name']
+        df[~rows_with_detailed_labels].strain_name
         + ' '
-        + df[~rows_with_detailed_labels]['infraspecific_name']
+        + df[~rows_with_detailed_labels].infraspecific_name
     )
     return df
