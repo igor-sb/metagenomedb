@@ -63,69 +63,81 @@ def create_download_list(
 
 # Check args
 assert queue, "no URLs given"
-num_urls = len(queue)
+n_total_urls = len(queue)
 num_conn = min(num_conn, num_urls)
 assert 1 <= num_conn <= 10000, "invalid number of concurrent connections"
 print("PycURL %s (compiled against 0x%x)" % (pycurl.version, pycurl.COMPILE_LIBCURL_VERSION_NUM))
 print("----- Getting", num_urls, "URLs using", num_conn, "connections -----")
 
 
-# Pre-allocate a list of curl objects
-m = pycurl.CurlMulti()
-m.handles = []
-for i in range(num_conn):
-    c = pycurl.Curl()
-    c.fp = None
-    c.setopt(pycurl.FOLLOWLOCATION, 1)
-    c.setopt(pycurl.MAXREDIRS, 5)
-    c.setopt(pycurl.CONNECTTIMEOUT, 30)
-    c.setopt(pycurl.TIMEOUT, 300)
-    c.setopt(pycurl.NOSIGNAL, 1)
-    m.handles.append(c)
+def preallocate_curl_handles():
+    multicurl = pycurl.CurlMulti()
+    multicurl.handles = []
+    for i in range(num_conn):
+        curl_handle = pycurl.Curl()
+        curl_handle.fp = None
+        curl_handle.setopt(pycurl.FOLLOWLOCATION, 1)
+        curl_handle.setopt(pycurl.MAXREDIRS, 5)
+        curl_handle.setopt(pycurl.CONNECTTIMEOUT, 30)
+        curl_handle.setopt(pycurl.TIMEOUT, 300)
+        curl_handle.setopt(pycurl.NOSIGNAL, 1)
+        multicurl.handles.append(curl_handle)
+    return multicurl
 
+multicurl = preallocate_curl_handles()
 
 # Main loop
-freelist = m.handles[:]
-num_processed = 0
-while num_processed < num_urls:
+free_handles = multicurl.handles[:]
+n_processed_urls = 0
+while n_processed_urls < n_total_urls:
     # If there is an url to process and a free curl object, add to multi stack
-    while queue and freelist:
+    while queue and free_handles:
         url, filename = queue.pop(0)
-        c = freelist.pop()
-        c.fp = open(filename, "wb")
-        c.setopt(pycurl.URL, url)
-        c.setopt(pycurl.WRITEDATA, c.fp)
-        m.add_handle(c)
+        curl_handle = free_handles.pop()
+        curl_handle.fp = open(filename, "wb")
+        curl_handle.setopt(pycurl.URL, url)
+        curl_handle.setopt(pycurl.WRITEDATA, c.fp)
+        multicurl.add_handle(curl_handle)
         # store some info
-        c.filename = filename
-        c.url = url
+        curl_handle.filename = filename
+        curl_handle.url = url
     # Run the internal curl state machine for the multi stack
     while 1:
-        ret, num_handles = m.perform()
+        ret, num_handles = multicurl.perform()
         if ret != pycurl.E_CALL_MULTI_PERFORM:
             break
     # Check for curl objects which have terminated, and add them to the freelist
     while 1:
-        num_q, ok_list, err_list = m.info_read()
-        for c in ok_list:
-            c.fp.close()
-            c.fp = None
-            m.remove_handle(c)
-            print("Success:", c.filename, c.url, c.getinfo(pycurl.EFFECTIVE_URL))
-            freelist.append(c)
-        for c, errno, errmsg in err_list:
-            c.fp.close()
-            c.fp = None
-            m.remove_handle(c)
-            print("Failed: ", c.filename, c.url, errno, errmsg)
-            freelist.append(c)
-        num_processed = num_processed + len(ok_list) + len(err_list)
-        if num_q == 0:
+        n_terminated, success_handles, failed_handles = multicurl.info_read()
+        # Remove success_handles from the multicurl and add them to the free_handles
+        def free_success_handles(multicurl, success_handles, free_handles):            
+            for curl_handle in success_handles:
+                curl_handle.fp.close()
+                curl_handle.fp = None
+                multicurl.remove_handle(curl_handle)
+                print("Success:", curl_handle.filename, curl_handle.url, curl_handle.getinfo(pycurl.EFFECTIVE_URL))
+                free_handles.append(curl_handle)
+            return (multicurl, success_handles, free_handles)
+
+        multicurl, success_handles, free_handles = free_success_handles(
+            multicurl,
+            success_handles,
+            free_handles,
+        )
+
+        for curl_handle, errno, errmsg in failed_handles:
+            curl_handle.fp.close()
+            curl_handle.fp = None
+            multicurl.remove_handle(curl_handle)
+            print("Failed: ", curl_handle.filename, curl_handle.url, errno, errmsg)
+            free_handles.append(curl_handle)
+        n_processed_urls += len(success_handles) + len(failed_handles)
+        if n_terminated == 0:
             break
     # Currently no more I/O is pending, could do something in the meantime
     # (display a progress bar, etc.).
     # We just call select() to sleep until some more data is available.
-    m.select(1.0)
+    multicurl.select(1.0)
 
 
 # Cleanup
@@ -136,3 +148,6 @@ for c in m.handles:
     c.close()
 m.close()
 
+class ParallelDownloader():
+    
+    pass
