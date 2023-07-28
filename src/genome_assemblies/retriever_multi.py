@@ -149,5 +149,19 @@ for c in m.handles:
 m.close()
 
 class ParallelDownloader():
-    
-    pass
+    def __init__(self, n_parallel):
+        self.n_parallel = n_parallel
+        self.multicurl = pycurl.CurlMulti()
+        self.multicurl.handles = []
+        for i in range(n_parallel):
+            curl_handle = pycurl.Curl()
+            curl_handle.fp = None
+            curl_handle.setopt(pycurl.FOLLOWLOCATION, 1)
+            curl_handle.setopt(pycurl.MAXREDIRS, 5)
+            curl_handle.setopt(pycurl.CONNECTTIMEOUT, 30)
+            curl_handle.setopt(pycurl.TIMEOUT, 300)
+            curl_handle.setopt(pycurl.NOSIGNAL, 1)
+            multicurl.handles.append(curl_handle)        
+        self.free_handles = []
+        self.success_handles = []
+        self.failed_handles = []
