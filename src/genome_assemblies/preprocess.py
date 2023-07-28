@@ -24,7 +24,7 @@ def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:
         assemblies_df
         .sort_values(
             by=['assembly_level', 'refseq_category', 'seq_rel_date'],
-            ascending=[True, True, False],            
+            ascending=[True, True, False],
         )
         .groupby('strain_name')
         .first()
