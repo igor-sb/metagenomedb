@@ -4,7 +4,7 @@ from src.genome_assemblies.io import (
     load_raw_assembly_summary_table,
     preprocessed_assembly_summary_columns,
 )
-from src.genome_assemblies.preprocess import select_best_strain_assemblies
+from src.genome_assemblies.preprocess_summary import select_best_strain_assemblies
 
 
 def test_select_best_strain_assemblies(
