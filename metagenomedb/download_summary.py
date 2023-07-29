@@ -4,7 +4,9 @@ import logging
 
 import fire
 
-from src.genome_assemblies.download import download_assembly_summaries
+from metagenomedb.genome_assemblies.download_summary import (
+    download_assembly_summaries,
+)
 
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
