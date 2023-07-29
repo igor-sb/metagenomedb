@@ -41,11 +41,11 @@ def create_kingdom_output_filename(
 
 def download_assembly_summaries(
     output_path: str,
-    kingdoms: list[str] = ['archaea', 'bacteria'],
+    kingdoms: tuple = ('archaea', 'bacteria'),
     timestamp: bool = True,
 ) -> list[str]:
     filenames = []
-    for kingdom in kingdoms.split(','):
+    for kingdom in kingdoms:
         output_filename_with_path = create_kingdom_output_filename(
             output_path,
             kingdom,
