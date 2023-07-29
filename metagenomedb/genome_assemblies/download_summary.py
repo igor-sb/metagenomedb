@@ -41,7 +41,7 @@ def create_kingdom_output_filename(
 
 def download_assembly_summaries(
     output_path: str,
-    kingdoms: str = 'archaea,bacteria',
+    kingdoms: list[str] = ['archaea', 'bacteria'],
     timestamp: bool = True,
 ) -> list[str]:
     filenames = []
