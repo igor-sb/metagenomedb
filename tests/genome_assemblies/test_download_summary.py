@@ -1,9 +1,7 @@
 import os
 import tempfile
 
-from src.genome_assemblies.download_summary import (
-    download_assembly_summaries,
-)
+from src.genome_assemblies.download_summary import download_assembly_summaries
 
 
 def test_download_assembly_summaries():

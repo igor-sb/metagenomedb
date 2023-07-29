@@ -1,1 +1,1 @@
-"""Genome assembly summary, features and sequences processing"""
+"""Genome assembly summary, features and sequences processing."""
