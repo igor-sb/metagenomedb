@@ -1,24 +1,26 @@
+import os
 import pytest
-from unittest.mock import patch
+import tempfile
 
 from src.genome_assemblies.parallel_download import ParallelDownloader
 
-def mock_download(url):
-    # Simulate the behavior of the download function
-    return f"Mock content for {url}"
+
+@pytest.fixture(name='parallel_download_test_urls')
+def fixture_parallel_download_test_urls():
+    return (
+        'ftp://ftp.ncbi.nlm.nih.gov/robots.txt',
+        'ftp://ftp.ncbi.nlm.nih.gov/favicon.ico',
+        'ftp://ftp.ncbi.nlm.nih.gov/fufuter.html',
+        'ftp://ftp.ncbi.nlm.nih.gov/README.ftp',
+    )
 
 
-def test_parallel_download():
-    # Sample list of URLs to test with
-    urls = ["http://example.com/file1.txt", "http://example.com/file2.txt", "http://example.com/file3.txt"]
-
-
-    # Mock the download function
-    with patch("parallel_downloader.download", side_effect=mock_download):
-        # Call the function to be tested
-        result = parallel_download(urls)
-
-    # Assert the results against the expected mock content
-    assert result == ["Mock content for http://example.com/file1.txt",
-                      "Mock content for http://example.com/file2.txt",
-                      "Mock content for http://example.com/file3.txt"]
+def test_parallel_download(parallel_download_test_urls):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        queue = [
+            (url, os.path.join(tmp_dir, os.path.basename(url)))
+            for url in parallel_download_test_urls
+        ]
+        parallel_dl = ParallelDownloader(queue, n_parallel=2)
+        parallel_dl.run()
+        assert parallel_dl.n_processed_urls == parallel_dl.n_total_urls

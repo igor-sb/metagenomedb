@@ -1,5 +1,6 @@
 import pycurl
 
+
 class PyCurl(object):
 
     def __init__(self, max_redirs=5, conn_timeout=30, timeout=300):
