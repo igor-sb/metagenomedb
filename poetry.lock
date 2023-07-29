@@ -984,7 +984,7 @@ dev = ["pre-commit", "pytest-asyncio", "tox"]
 name = "pyyaml"
 version = "6.0.1"
 description = "YAML parser and emitter for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1071,6 +1071,27 @@ six = "*"
 [package.extras]
 fixture = ["fixtures"]
 test = ["fixtures", "mock", "purl", "pytest", "requests-futures", "sphinx", "testtools"]
+
+[[package]]
+name = "responses"
+version = "0.23.2"
+description = "A utility library for mocking out the `requests` Python library."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "responses-0.23.2-py3-none-any.whl", hash = "sha256:9d49c218ba3079022bd63427f12b0a43b43d2f6aaf5ed859b9df9d733b4dd775"},
+    {file = "responses-0.23.2.tar.gz", hash = "sha256:5d5a2ce3285f84e1f107d2e942476b6c7dff3747f289c0eae997cb77d2ab68e8"},
+]
+
+[package.dependencies]
+pyyaml = "*"
+requests = ">=2.30.0,<3.0"
+types-PyYAML = "*"
+urllib3 = ">=2.0.0,<3.0"
+
+[package.extras]
+tests = ["coverage (>=6.0.0)", "flake8", "mypy", "pytest (>=7.0.0)", "pytest-asyncio", "pytest-cov", "pytest-httpserver", "tomli", "tomli-w", "types-requests"]
 
 [[package]]
 name = "restructuredtext-lint"
@@ -1213,6 +1234,18 @@ files = [
 ]
 
 [[package]]
+name = "types-pyyaml"
+version = "6.0.12.11"
+description = "Typing stubs for PyYAML"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-PyYAML-6.0.12.11.tar.gz", hash = "sha256:7d340b19ca28cddfdba438ee638cd4084bde213e501a3978738543e27094775b"},
+    {file = "types_PyYAML-6.0.12.11-py3-none-any.whl", hash = "sha256:a461508f3096d1d5810ec5ab95d7eeecb651f3a15b71959999988942063bf01d"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.7.1"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1324,4 +1357,4 @@ typing_extensions = ">=3.6,<5.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "30f86d0d58dac4cf4e3a4d544a1b58e6a3807ba3ff63e81e178f87b6d759de4c"
+content-hash = "886cbdba64d3745fc875bff5427a6be8de426a09e03e56d6a66938570b828268"
