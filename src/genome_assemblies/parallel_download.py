@@ -1,7 +1,6 @@
 import pycurl
 
-
-class PyCurlHandle(object):
+class PyCurl(object):
 
     def __init__(self, max_redirs=5, conn_timeout=30, timeout=300):
         self.curl_handle = pycurl.Curl()
@@ -12,26 +11,38 @@ class PyCurlHandle(object):
         self.curl_handle.setopt(pycurl.TIMEOUT, timeout)
         self.curl_handle.setopt(pycurl.NOSIGNAL, 1)
 
+    def get_handle(self):
+        return self.curl_handle
+
+
+class MultiPyCurl(object):
+
+    def __init__(self, n_handles):
+        self.curl_handles = []
+        for _ in range(n_handles):
+            self.curl_handles.append(PyCurl().get_handle())
+
+    def get_handles(self):
+        return self.curl_handles
+
 
 class ParallelDownloader(object):
 
     def __init__(self, queue, n_parallel):
         self._curlm = pycurl.CurlMulti()
-        self._curlm.handles = [PyCurlHandle() for _ in range(n_parallel)]
-        self._free_handles = self._curlm.handles[:]
+        self._curlm.handles = MultiPyCurl(n_parallel).get_handles()
+        self._free_handles = self._curlm.handles
         self._queue = queue
         self.n_processed_urls = 0
         self.n_total_urls = len(queue)
-        return self
 
     def run(self):
         while self.n_processed_urls < self.n_total_urls:
             self.create_handles_for_urls()
             self.start_downloads()
             self.check_succeded_and_failed_downloads()
+            self._curlm.select(1.0)
         self.close_any_active_handles()
-        self._curlm.select(1.0)
-        return self
 
     def create_handles_for_urls(self):
         while self._queue and self._free_handles:
