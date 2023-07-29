@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
 
+      - name: Install libcurl4-openssl-dev
+        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
+
       - name: Install poetry
         run: |
           pip3 install --upgrade poetry
@@ -35,9 +38,7 @@ jobs:
 
       - name: Install dependencies and project in dev mode
         if: steps.cache.outputs.cache-hit != true
-        run:
-          sudo apt install libcurl4-openssl-dev
-          make install
+        run: make install
 
       - name:
         run: make lint
