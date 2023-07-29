@@ -1,6 +1,6 @@
 POETRY_RUN := poetry run
-FOLDERS= src
-PROJ= src
+FOLDERS= metagenomedb
+PROJ= metagenomedb
 NC=\033[0m # No Color
 
 .PHONY: install autolint lint lint-flake8 shell precommit poetry-precommit \
