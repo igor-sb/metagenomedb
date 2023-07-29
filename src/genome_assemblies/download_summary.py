@@ -21,8 +21,22 @@ def download_kingdom_assembly_summary(
     return urlretrieve(url, output_filename)  # noqa: S310
 
 
-def create_output_filename(output_path: str, timestamp: bool = True) -> str:
-    pass
+def create_kingdom_output_filename(
+    kingdom: str,
+    output_path: str,
+    timestamp: bool,
+) -> str:
+    if timestamp:
+        suffix = '_{current_date}'.format(
+            current_date=datetime.now().strftime('%Y-%m-%d'),
+        )
+    else:
+        suffix = ''
+    output_base_filename = '{kingdom}_assembly_summary{suffix}.txt'.format(
+        kingdom=kingdom,
+        suffix=suffix,
+    )
+    return os.path.join(output_path, output_base_filename)
 
 
 def download_assembly_summaries(
@@ -31,18 +45,12 @@ def download_assembly_summaries(
     timestamp: bool = True,
 ) -> list[str]:
     filenames = []
-    if timestamp:
-        suffix = '_{current_date}'.format(
-            current_date=datetime.now().strftime('%Y-%m-%d'),
-        )
-    else:
-        suffix = ''
     for kingdom in kingdoms.split(','):
-        output_filename = '{kingdom}_assembly_summary{suffix}.txt'.format(
-            kingdom=kingdom,
-            suffix=suffix,
+        output_filename_with_path = create_kingdom_output_filename(
+            output_path,
+            kingdom,
+            timestamp,
         )
-        output_filename_with_path = os.path.join(output_path, output_filename)
         download_kingdom_assembly_summary(kingdom, output_filename_with_path)
         filenames.append(output_filename_with_path)
     return filenames
