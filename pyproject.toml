@@ -7,14 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-mypy = "^0.991"
 fire = "^0.5.0"
-pytest-mock = "^3.11.1"
-requests-mock = "^1.11.0"
 pandas = "^2.0.3"
-types-pyyaml = "^6.0.12.11"
 pycurl = "^7.45.2"
-pytest-snapshot = "^0.9.0"
 pydantic = "^2.1.1"
 
 [tool.poetry.group.dev.dependencies]
@@ -27,6 +22,12 @@ flake8 = "4.0.1"
 pre-commit = "^2.20.0"
 coverage = "^6.5.0"
 ipykernel = "^6.25.0"
+types-pyyaml = "^6.0.12.11"
+types-pycurl = "^7.45.2.4"
+pytest-snapshot = "^0.9.0"
+pytest-mock = "^3.11.1"
+requests-mock = "^1.11.0"
+mypy = "^0.991"
 
 [build-system]
 requires = ["poetry-core"]

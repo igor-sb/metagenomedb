@@ -14,7 +14,7 @@ def test_download_assembly_summaries():
 
 def test_create_download_queues(
     mock_preprocessed_assembly_summary_file,
-    snapshot
+    snapshot,
 ):
     snapshot.snapshot_dir = 'tests/fixtures'
     snapshot.assert_match(
