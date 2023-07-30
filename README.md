@@ -1,4 +1,5 @@
-[![CI/CD](https://github.com/igor-sb/metagenomedb/actions/workflows/ci.yaml/badge.svg)](https://github.com/igor-sb/metagenomedb/actions)
+[![Lint](https://github.com/igor-sb/metagenomedb/actions/workflows/lint.yml/badge.svg)](https://github.com/igor-sb/metagenomedb/actions)
+[![Tests](https://github.com/igor-sb/metagenomedb/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/igor-sb/metagenomedb/actions)
 [![codecov](https://codecov.io/gh/igor-sb/metagenomedb/branch/main/graph/badge.svg?token=WRQ8X3SDVA)](https://codecov.io/gh/igor-sb/metagenomedb)
 
 # Metagenome 16S Database
