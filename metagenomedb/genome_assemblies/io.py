@@ -1,3 +1,5 @@
+"""Input/output functions for genome assemblies."""
+
 from typing import Any
 
 import pandas as pd

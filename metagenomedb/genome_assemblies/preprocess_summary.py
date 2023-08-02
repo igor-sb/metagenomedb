@@ -1,9 +1,11 @@
+"""Functions for pre-processing assembly summary tables."""
+
 import os
 import re
 
 import pandas as pd
 
-from src.genome_assemblies.io import assembly_summary_config
+from metagenomedb.genome_assemblies.io import assembly_summary_config
 
 
 def select_best_strain_assemblies(assemblies_df: pd.DataFrame) -> pd.DataFrame:

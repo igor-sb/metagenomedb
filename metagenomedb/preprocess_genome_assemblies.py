@@ -8,11 +8,11 @@ import logging
 
 import fire
 
-from src.genome_assemblies.io import (
+from metagenomedb.genome_assemblies.io import (
     load_raw_assembly_summary_table,
     write_filtered_assembly_summary_table,
 )
-from src.genome_assemblies.preprocess_summary import (
+from metagenomedb.genome_assemblies.preprocess_summary import (
     select_best_strain_assemblies,
 )
 

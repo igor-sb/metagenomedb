@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.genome_assemblies.io import load_raw_assembly_summary_table
+from metagenomedb.genome_assemblies.io import load_raw_assembly_summary_table
 
 
 def test_load_raw_assembly_summary_table(mock_assembly_summary_file):
