@@ -3,6 +3,7 @@
 import logging
 
 import fire
+
 from genome_assemblies.download_summary import download_assembly_summaries
 
 logging.basicConfig(level=logging.INFO)
