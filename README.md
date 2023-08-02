@@ -1,3 +1,6 @@
+[![CI](https://github.com/igor-sb/metagenomedb/actions/workflows/ci.yml/badge.svg)](https://github.com/igor-sb/metagenomedb/actions)
+[![codecov](https://codecov.io/gh/igor-sb/metagenomedb/branch/main/graph/badge.svg?token=WRQ8X3SDVA)](https://codecov.io/gh/igor-sb/metagenomedb)
+
 # Metagenome 16S Database
 
 Code for downloading, preprocessing, and organizing microbial 16S sequences
@@ -11,8 +14,6 @@ For reproducible analysis, first install [poetry](https://python-poetry.org/docs
 make install
 make shell
 ```
-
-TO DO: Connect these in a Snakemake workflow later.
 
 ## Download microbial genome assembly summary tables
 

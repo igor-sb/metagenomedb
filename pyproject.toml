@@ -6,13 +6,11 @@ authors = ["nicklamiller <nicklamiller@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 mypy = "^0.991"
 fire = "^0.5.0"
 pytest-mock = "^3.11.1"
 requests-mock = "^1.11.0"
-pandas = "^2.0.3"
-types-pyyaml = "^6.0.12.11"
 responses = "^0.23.2"
 
 [tool.poetry.group.dev.dependencies]
